@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/GroceryControl.API/GroceryControl.API.csproj" />
+    <Project Path="src/GroceryControl.Application/GroceryControl.Application.csproj" />
+    <Project Path="src/GroceryControl.Domain/GroceryControl.Domain.csproj" />
+    <Project Path="src/GroceryControl.Infrastructure/GroceryControl.Infrastructure.csproj" />
+  </Folder>
+</Solution>
