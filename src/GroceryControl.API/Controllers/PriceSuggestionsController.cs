@@ -22,9 +22,9 @@ public class PriceSuggestionsController : ControllerBase
 
     [HttpGet]
     public async Task<ActionResult<List<PriceSuggestionDto>>> GetLowestPrices(
-        [FromQuery] Guid? productId, [FromQuery] Guid? storeId, CancellationToken ct)
+        [FromQuery] Guid productId, CancellationToken ct)
     {
-        var result = await _mediator.Send(new GetLowestPricesQuery(productId ?? Guid.Empty), ct);
+        var result = await _mediator.Send(new GetLowestPricesQuery(productId), ct);
         return Ok(result);
     }
 

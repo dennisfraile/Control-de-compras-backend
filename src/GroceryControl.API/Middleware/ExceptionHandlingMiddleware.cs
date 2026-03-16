@@ -1,5 +1,4 @@
 using System.Net;
-using System.Text.Json;
 
 namespace GroceryControl.API.Middleware;
 
@@ -29,18 +28,46 @@ public class ExceptionHandlingMiddleware
 
     private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        var (statusCode, message) = exception switch
-        {
-            Application.Common.Exceptions.NotFoundException => (HttpStatusCode.NotFound, exception.Message),
-            Application.Common.Exceptions.ForbiddenException => (HttpStatusCode.Forbidden, exception.Message),
-            Application.Common.Exceptions.ValidationException validationEx => (HttpStatusCode.BadRequest, JsonSerializer.Serialize(validationEx.Errors)),
-            _ => (HttpStatusCode.InternalServerError, "An unexpected error occurred")
-        };
-
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)statusCode;
 
-        var response = new { error = message, statusCode = (int)statusCode };
-        await context.Response.WriteAsJsonAsync(response);
+        switch (exception)
+        {
+            case Application.Common.Exceptions.ValidationException validationEx:
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    error = "One or more validation failures have occurred.",
+                    statusCode = (int)HttpStatusCode.BadRequest,
+                    errors = validationEx.Errors
+                });
+                break;
+
+            case Application.Common.Exceptions.NotFoundException:
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    error = exception.Message,
+                    statusCode = (int)HttpStatusCode.NotFound
+                });
+                break;
+
+            case Application.Common.Exceptions.ForbiddenException:
+                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    error = exception.Message,
+                    statusCode = (int)HttpStatusCode.Forbidden
+                });
+                break;
+
+            default:
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    error = "An unexpected error occurred",
+                    statusCode = (int)HttpStatusCode.InternalServerError
+                });
+                break;
+        }
     }
 }

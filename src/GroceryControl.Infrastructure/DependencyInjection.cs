@@ -18,6 +18,9 @@ public static class DependencyInjection
         services.AddDbContext<GroceryControlDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
+        services.AddScoped<IApplicationDbContext>(provider =>
+            provider.GetRequiredService<GroceryControlDbContext>());
+
         // Repositories & UnitOfWork
         services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
         services.AddScoped<IUnitOfWork, UnitOfWork>();

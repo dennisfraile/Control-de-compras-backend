@@ -1,6 +1,7 @@
 using GroceryControl.Application.Features.Inventory.Commands.ConsumeStock;
 using GroceryControl.Application.Features.Inventory.Commands.UpdateStock;
 using GroceryControl.Application.Features.Inventory.DTOs;
+using GroceryControl.Application.Features.Inventory.Queries.ExportInventory;
 using GroceryControl.Application.Features.Inventory.Queries.GetInventory;
 using GroceryControl.Application.Features.Inventory.Queries.GetLowStock;
 using MediatR;
@@ -26,6 +27,13 @@ public class InventoryController : ControllerBase
     {
         var result = await _mediator.Send(new GetInventoryQuery(), ct);
         return Ok(result);
+    }
+
+    [HttpGet("export")]
+    public async Task<IActionResult> Export(CancellationToken ct)
+    {
+        var bytes = await _mediator.Send(new ExportInventoryQuery(), ct);
+        return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "inventario.xlsx");
     }
 
     [HttpGet("low-stock")]

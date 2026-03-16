@@ -59,7 +59,7 @@ public class ProductsController : ControllerBase
 
     [HttpGet("{id:guid}/price-history")]
     public async Task<ActionResult<List<PriceHistoryDto>>> GetPriceHistory(
-        Guid id, [FromQuery] int months = 6, CancellationToken ct = default)
+        Guid id, CancellationToken ct = default)
     {
         var result = await _mediator.Send(new GetPriceHistoryQuery(id), ct);
         return Ok(result);

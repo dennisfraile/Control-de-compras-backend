@@ -19,6 +19,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<List<CategoryDto>>> GetAll(CancellationToken ct)
     {
         var result = await _mediator.Send(new GetCategoriesQuery(), ct);

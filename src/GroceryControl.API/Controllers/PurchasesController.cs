@@ -1,6 +1,7 @@
 using GroceryControl.Application.Features.Purchases.Commands.CreatePurchase;
 using GroceryControl.Application.Features.Purchases.Commands.DeletePurchase;
 using GroceryControl.Application.Features.Purchases.DTOs;
+using GroceryControl.Application.Features.Purchases.Queries.ExportPurchases;
 using GroceryControl.Application.Features.Purchases.Queries.GetPurchases;
 using GroceryControl.Application.Features.Purchases.Queries.GetPurchaseSummary;
 using MediatR;
@@ -46,11 +47,19 @@ public class PurchasesController : ControllerBase
         return NoContent();
     }
 
+    [HttpGet("export")]
+    public async Task<IActionResult> Export(
+        [FromQuery] DateTime? from, [FromQuery] DateTime? to, CancellationToken ct)
+    {
+        var bytes = await _mediator.Send(new ExportPurchasesQuery(from, to), ct);
+        return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "compras.xlsx");
+    }
+
     [HttpGet("summary")]
     public async Task<ActionResult<List<PurchaseSummaryDto>>> GetSummary(
-        [FromQuery] int months = 6, CancellationToken ct = default)
+        [FromQuery] int? year, [FromQuery] int? month, CancellationToken ct = default)
     {
-        var result = await _mediator.Send(new GetPurchaseSummaryQuery(null, null), ct);
+        var result = await _mediator.Send(new GetPurchaseSummaryQuery(year, month), ct);
         return Ok(result);
     }
 }

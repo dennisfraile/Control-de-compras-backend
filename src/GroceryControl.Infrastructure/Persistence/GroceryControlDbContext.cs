@@ -1,10 +1,11 @@
+using GroceryControl.Application.Common.Interfaces;
 using GroceryControl.Domain.Entities;
 using GroceryControl.Infrastructure.Persistence.Seeds;
 using Microsoft.EntityFrameworkCore;
 
 namespace GroceryControl.Infrastructure.Persistence;
 
-public class GroceryControlDbContext : DbContext
+public class GroceryControlDbContext : DbContext, IApplicationDbContext
 {
     public GroceryControlDbContext(DbContextOptions<GroceryControlDbContext> options)
         : base(options)
