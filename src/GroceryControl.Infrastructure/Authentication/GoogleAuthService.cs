@@ -22,7 +22,7 @@ public class GoogleAuthService : IGoogleAuthService
     {
         var settings = new GoogleJsonWebSignature.ValidationSettings
         {
-            Audience = new[] { _configuration["Authentication:Google:ClientId"] ?? string.Empty }
+            Audience = new[] { _configuration["Google:ClientId"] ?? string.Empty }
         };
 
         var payload = await GoogleJsonWebSignature.ValidateAsync(idToken, settings);

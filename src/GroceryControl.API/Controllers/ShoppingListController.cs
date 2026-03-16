@@ -18,6 +18,13 @@ public class ShoppingListController : ControllerBase
         _mediator = mediator;
     }
 
+    [HttpGet]
+    public async Task<ActionResult<List<ShoppingListSuggestionDto>>> Get(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GenerateShoppingListQuery(), ct);
+        return Ok(result);
+    }
+
     [HttpGet("generate")]
     public async Task<ActionResult<List<ShoppingListSuggestionDto>>> Generate(CancellationToken ct)
     {

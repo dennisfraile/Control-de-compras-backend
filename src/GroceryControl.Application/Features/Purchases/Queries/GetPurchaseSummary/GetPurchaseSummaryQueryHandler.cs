@@ -20,7 +20,6 @@ public class GetPurchaseSummaryQueryHandler : IRequestHandler<GetPurchaseSummary
     {
         var query = _context.Purchases
             .AsNoTracking()
-            .Include(p => p.Items)
             .Where(p => p.UserId == _currentUser.UserId);
 
         if (request.Year.HasValue)
@@ -29,17 +28,21 @@ public class GetPurchaseSummaryQueryHandler : IRequestHandler<GetPurchaseSummary
         if (request.Month.HasValue)
             query = query.Where(p => p.PurchaseDateUtc.Month == request.Month.Value);
 
-        var summaries = await query
+        var purchases = await query
+            .Select(p => new { p.PurchaseDateUtc, p.TotalAmount })
+            .ToListAsync(cancellationToken);
+
+        var summaries = purchases
             .GroupBy(p => new { p.PurchaseDateUtc.Year, p.PurchaseDateUtc.Month })
             .Select(g => new PurchaseSummaryDto(
                 g.Key.Year,
                 g.Key.Month,
                 g.Sum(p => p.TotalAmount),
                 g.Count(),
-                g.Sum(p => p.Items.Count)))
+                0))
             .OrderByDescending(s => s.Year)
             .ThenByDescending(s => s.Month)
-            .ToListAsync(cancellationToken);
+            .ToList();
 
         return summaries;
     }
