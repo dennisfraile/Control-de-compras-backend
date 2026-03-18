@@ -1,6 +1,7 @@
 using System.Text;
 using GroceryControl.Application;
 using GroceryControl.Infrastructure;
+using GroceryControl.API.Hubs;
 using GroceryControl.API.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -28,9 +29,27 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateLifetime = true,
             ClockSkew = TimeSpan.Zero
         };
+
+        // Allow SignalR to receive the JWT token via query string
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                {
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            }
+        };
     });
 
 builder.Services.AddAuthorization();
+
+// SignalR
+builder.Services.AddSignalR();
 
 // Controllers
 builder.Services.AddControllers();
@@ -98,5 +117,6 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<ShoppingListHub>("/hubs/shopping-list");
 
 app.Run();

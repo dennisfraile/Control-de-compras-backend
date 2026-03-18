@@ -2,6 +2,8 @@ using GroceryControl.Application.Features.Products.Commands.CreateProduct;
 using GroceryControl.Application.Features.Products.Commands.UpdateProduct;
 using GroceryControl.Application.Features.Products.DTOs;
 using GroceryControl.Application.Features.Products.Queries.GetProducts;
+using GroceryControl.Application.Features.Products.Commands.ToggleFavorite;
+using GroceryControl.Application.Features.Products.Queries.GetFavorites;
 using GroceryControl.Application.Features.Products.Queries.SearchProducts;
 using GroceryControl.Application.Features.Purchases.DTOs;
 using GroceryControl.Application.Features.Purchases.Queries.GetPriceHistory;
@@ -54,6 +56,20 @@ public class ProductsController : ControllerBase
     {
         if (id != command.Id) return BadRequest();
         var result = await _mediator.Send(command, ct);
+        return Ok(result);
+    }
+
+    [HttpPost("{id:guid}/toggle-favorite")]
+    public async Task<ActionResult<bool>> ToggleFavorite(Guid id, CancellationToken ct)
+    {
+        var isFavorited = await _mediator.Send(new ToggleFavoriteCommand(id), ct);
+        return Ok(new { isFavorited });
+    }
+
+    [HttpGet("favorites")]
+    public async Task<ActionResult<List<ProductDto>>> GetFavorites(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetFavoritesQuery(), ct);
         return Ok(result);
     }
 

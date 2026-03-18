@@ -33,6 +33,9 @@ public static class DependencyInjection
 
         // Services
         services.AddScoped<IShoppingListGenerator, ShoppingListGenerator>();
+        services.AddScoped<IReceiptScannerService, ReceiptScannerService>();
+        services.AddScoped<IConsumptionAnalyzer, ConsumptionAnalyzer>();
+        services.AddScoped<IRecipeSuggestionService, RecipeSuggestionService>();
 
         return services;
     }

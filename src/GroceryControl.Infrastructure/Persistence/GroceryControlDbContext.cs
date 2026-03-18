@@ -22,6 +22,9 @@ public class GroceryControlDbContext : DbContext, IApplicationDbContext
     public DbSet<PurchaseItem> PurchaseItems => Set<PurchaseItem>();
     public DbSet<InventoryEntry> InventoryEntries => Set<InventoryEntry>();
     public DbSet<PriceSuggestion> PriceSuggestions => Set<PriceSuggestion>();
+    public DbSet<UserFavoriteProduct> UserFavoriteProducts => Set<UserFavoriteProduct>();
+    public DbSet<ShoppingTemplate> ShoppingTemplates => Set<ShoppingTemplate>();
+    public DbSet<ShoppingTemplateItem> ShoppingTemplateItems => Set<ShoppingTemplateItem>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

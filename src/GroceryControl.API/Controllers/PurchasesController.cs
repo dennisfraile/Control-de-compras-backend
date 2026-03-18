@@ -1,9 +1,11 @@
 using GroceryControl.Application.Features.Purchases.Commands.CreatePurchase;
 using GroceryControl.Application.Features.Purchases.Commands.DeletePurchase;
+using GroceryControl.Application.Features.Purchases.Commands.ScanReceipt;
 using GroceryControl.Application.Features.Purchases.DTOs;
 using GroceryControl.Application.Features.Purchases.Queries.ExportPurchases;
 using GroceryControl.Application.Features.Purchases.Queries.GetPurchases;
 using GroceryControl.Application.Features.Purchases.Queries.GetPurchaseSummary;
+using GroceryControl.Application.Features.Purchases.Queries.GetSavingsAnalysis;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -53,6 +55,25 @@ public class PurchasesController : ControllerBase
     {
         var bytes = await _mediator.Send(new ExportPurchasesQuery(from, to), ct);
         return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "compras.xlsx");
+    }
+
+    [HttpPost("scan-receipt")]
+    [RequestSizeLimit(10 * 1024 * 1024)] // 10MB max
+    public async Task<IActionResult> ScanReceipt(IFormFile file, CancellationToken ct)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest(new { error = "No se proporcionó imagen" });
+
+        using var stream = file.OpenReadStream();
+        var result = await _mediator.Send(new ScanReceiptCommand(stream), ct);
+        return Ok(result);
+    }
+
+    [HttpGet("savings-analysis")]
+    public async Task<ActionResult<SavingsAnalysisDto>> GetSavingsAnalysis(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetSavingsAnalysisQuery(), ct);
+        return Ok(result);
     }
 
     [HttpGet("summary")]

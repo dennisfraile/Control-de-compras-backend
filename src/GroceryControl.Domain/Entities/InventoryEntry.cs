@@ -9,6 +9,7 @@ public class InventoryEntry
     public int UnitTypeId { get; set; }
     public decimal MinimumThreshold { get; set; }
     public DateTime LastUpdatedUtc { get; set; }
+    public DateTime? ExpirationDateUtc { get; set; }
 
     // Navigation
     public User User { get; set; } = null!;

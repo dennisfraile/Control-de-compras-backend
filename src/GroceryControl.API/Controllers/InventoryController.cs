@@ -4,6 +4,9 @@ using GroceryControl.Application.Features.Inventory.DTOs;
 using GroceryControl.Application.Features.Inventory.Queries.ExportInventory;
 using GroceryControl.Application.Features.Inventory.Queries.GetInventory;
 using GroceryControl.Application.Features.Inventory.Queries.GetLowStock;
+using GroceryControl.Application.Features.Inventory.Queries.GetExpiringItems;
+using GroceryControl.Application.Features.Inventory.Queries.GetRestockAlerts;
+using GroceryControl.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -40,6 +43,21 @@ public class InventoryController : ControllerBase
     public async Task<ActionResult<List<InventoryEntryDto>>> GetLowStock(CancellationToken ct)
     {
         var result = await _mediator.Send(new GetLowStockQuery(), ct);
+        return Ok(result);
+    }
+
+    [HttpGet("expiring")]
+    public async Task<ActionResult<List<ExpiringItemDto>>> GetExpiring(
+        [FromQuery] int daysAhead = 7, CancellationToken ct = default)
+    {
+        var result = await _mediator.Send(new GetExpiringItemsQuery(daysAhead), ct);
+        return Ok(result);
+    }
+
+    [HttpGet("restock-alerts")]
+    public async Task<ActionResult<List<RestockAlert>>> GetRestockAlerts(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetRestockAlertsQuery(), ct);
         return Ok(result);
     }
 
