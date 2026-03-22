@@ -8,7 +8,7 @@ public class UserProfile
     public Guid UserId { get; set; }
     public PurchaseFrequency PurchaseFrequency { get; set; } = PurchaseFrequency.Monthly;
     public int HouseholdSize { get; set; } = 1;
-    public string PreferredCurrency { get; set; } = "MXN";
+    public string PreferredCurrency { get; set; } = "USD";
     public DateTime UpdatedAtUtc { get; set; }
 
     // Navigation
