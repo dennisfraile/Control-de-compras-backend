@@ -4,6 +4,7 @@ using GroceryControl.Application.Features.Purchases.Commands.QuickPurchase;
 using GroceryControl.Application.Features.Purchases.Commands.ScanReceipt;
 using GroceryControl.Application.Features.Purchases.DTOs;
 using GroceryControl.Application.Features.Purchases.Queries.ExportPurchases;
+using GroceryControl.Application.Features.Purchases.Queries.GetPurchaseCalendar;
 using GroceryControl.Application.Features.Purchases.Queries.GetPurchases;
 using GroceryControl.Application.Features.Purchases.Queries.GetPurchaseSummary;
 using GroceryControl.Application.Features.Purchases.Queries.GetSavingsAnalysis;
@@ -90,6 +91,14 @@ public class PurchasesController : ControllerBase
         [FromQuery] int? year, [FromQuery] int? month, CancellationToken ct = default)
     {
         var result = await _mediator.Send(new GetPurchaseSummaryQuery(year, month), ct);
+        return Ok(result);
+    }
+
+    [HttpGet("calendar")]
+    public async Task<ActionResult<List<PurchaseCalendarDayDto>>> GetCalendar(
+        [FromQuery] int year, [FromQuery] int month, CancellationToken ct = default)
+    {
+        var result = await _mediator.Send(new GetPurchaseCalendarQuery(year, month), ct);
         return Ok(result);
     }
 }

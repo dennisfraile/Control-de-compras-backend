@@ -10,7 +10,9 @@ public record ProductPriceDetailDto(
     decimal MostExpensivePrice,
     string MostExpensiveStore,
     string Trend,
-    List<PriceHistoryEntry> PriceHistory
+    List<PriceHistoryEntry> PriceHistory,
+    decimal? PricePerBaseUnit = null,
+    string? BaseUnitLabel = null
 );
 
 public record PriceHistoryEntry(

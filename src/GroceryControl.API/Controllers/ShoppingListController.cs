@@ -1,5 +1,6 @@
 using GroceryControl.Application.Features.ShoppingList.DTOs;
 using GroceryControl.Application.Features.ShoppingList.Queries.GenerateShoppingList;
+using GroceryControl.Application.Features.ShoppingList.Queries.GetShareText;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,5 +31,12 @@ public class ShoppingListController : ControllerBase
     {
         var result = await _mediator.Send(new GenerateShoppingListQuery(), ct);
         return Ok(result);
+    }
+
+    [HttpGet("share-text")]
+    public async Task<ActionResult<string>> GetShareText(CancellationToken ct)
+    {
+        var text = await _mediator.Send(new GetShoppingListShareTextQuery(), ct);
+        return Ok(text);
     }
 }

@@ -1,5 +1,6 @@
 using GroceryControl.Application.Common.Interfaces;
 using GroceryControl.Application.Features.Products.DTOs;
+using GroceryControl.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,7 @@ public class GetProductPriceDetailQueryHandler : IRequestHandler<GetProductPrice
         var product = await _context.Products
             .AsNoTracking()
             .Include(p => p.Category)
+            .Include(p => p.DefaultUnitType)
             .FirstOrDefaultAsync(p => p.Id == request.ProductId, cancellationToken)
             ?? throw new Application.Common.Exceptions.NotFoundException("Producto", request.ProductId);
 
@@ -40,9 +42,10 @@ public class GetProductPriceDetailQueryHandler : IRequestHandler<GetProductPrice
 
         if (history.Count == 0)
         {
+            var (emptyBasePrice, emptyBaseLabel) = CalculateBaseUnitPrice(0, product.DefaultUnitType);
             return new ProductPriceDetailDto(
                 product.Name, product.Brand, product.Category.Name,
-                0, 0, "-", 0, "-", "stable", history);
+                0, 0, "-", 0, "-", "stable", history, emptyBasePrice, emptyBaseLabel);
         }
 
         var avgPrice = history.Average(h => h.UnitPrice);
@@ -57,9 +60,27 @@ public class GetProductPriceDetailQueryHandler : IRequestHandler<GetProductPrice
             else if (last3[0] < last3[^1]) trend = "down";
         }
 
+        var (pricePerBaseUnit, baseUnitLabel) = CalculateBaseUnitPrice(Math.Round(avgPrice, 2), product.DefaultUnitType);
+
         return new ProductPriceDetailDto(
             product.Name, product.Brand, product.Category.Name,
             Math.Round(avgPrice, 2), cheapest.UnitPrice, cheapest.StoreName,
-            expensive.UnitPrice, expensive.StoreName, trend, history);
+            expensive.UnitPrice, expensive.StoreName, trend, history,
+            pricePerBaseUnit, baseUnitLabel);
+    }
+
+    private static (decimal? Price, string? Label) CalculateBaseUnitPrice(decimal avgPrice, Domain.Entities.UnitType unitType)
+    {
+        if (avgPrice == 0) return (null, null);
+
+        return unitType.MeasurementUnit switch
+        {
+            MeasurementUnit.Kilogram => (Math.Round(avgPrice, 2), "por kg"),
+            MeasurementUnit.Gram => (Math.Round(avgPrice * 1000m, 2), "por kg"),
+            MeasurementUnit.Liter => (Math.Round(avgPrice, 2), "por L"),
+            MeasurementUnit.Milliliter => (Math.Round(avgPrice * 1000m, 2), "por L"),
+            MeasurementUnit.Unit or MeasurementUnit.Piece => (Math.Round(avgPrice, 2), "por unidad"),
+            _ => (null, null)
+        };
     }
 }
