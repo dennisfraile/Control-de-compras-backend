@@ -1,5 +1,6 @@
 using GroceryControl.Application.Features.Reports.DTOs;
 using GroceryControl.Application.Features.Reports.Queries.GetPeriodSummary;
+using GroceryControl.Application.Features.Reports.Queries.GetConsumptionStats;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,13 @@ public class ReportsController : ControllerBase
         [FromQuery] string period = "month", CancellationToken ct = default)
     {
         var result = await _mediator.Send(new GetPeriodSummaryQuery(period), ct);
+        return Ok(result);
+    }
+
+    [HttpGet("statistics")]
+    public async Task<ActionResult<ConsumptionStatsDto>> GetStatistics(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetConsumptionStatsQuery(), ct);
         return Ok(result);
     }
 }

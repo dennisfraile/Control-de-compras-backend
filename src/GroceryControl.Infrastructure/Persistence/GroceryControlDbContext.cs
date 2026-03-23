@@ -25,6 +25,9 @@ public class GroceryControlDbContext : DbContext, IApplicationDbContext
     public DbSet<UserFavoriteProduct> UserFavoriteProducts => Set<UserFavoriteProduct>();
     public DbSet<ShoppingTemplate> ShoppingTemplates => Set<ShoppingTemplate>();
     public DbSet<ShoppingTemplateItem> ShoppingTemplateItems => Set<ShoppingTemplateItem>();
+    public DbSet<PurchaseBudget> PurchaseBudgets => Set<PurchaseBudget>();
+    public DbSet<Household> Households => Set<Household>();
+    public DbSet<HouseholdMember> HouseholdMembers => Set<HouseholdMember>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

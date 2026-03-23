@@ -47,6 +47,7 @@ public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, List<Pr
             p.DefaultUnitType.Abbreviation,
             p.DefaultQuantity,
             p.ImageUrl,
+            p.Notes,
             p.IsGlobal,
             p.CreatedByUserId,
             p.CreatedAtUtc)).ToList();

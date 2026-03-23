@@ -42,6 +42,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
         product.DefaultUnitTypeId = request.DefaultUnitTypeId;
         product.DefaultQuantity = request.DefaultQuantity;
         product.ImageUrl = request.ImageUrl;
+        product.Notes = request.Notes;
 
         _productRepository.Update(product);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -65,6 +66,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
             unitType.Abbreviation,
             product.DefaultQuantity,
             product.ImageUrl,
+            product.Notes,
             product.IsGlobal,
             product.CreatedByUserId,
             product.CreatedAtUtc);

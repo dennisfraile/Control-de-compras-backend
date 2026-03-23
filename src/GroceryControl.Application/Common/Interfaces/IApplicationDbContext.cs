@@ -18,6 +18,9 @@ public interface IApplicationDbContext
     DbSet<UserFavoriteProduct> UserFavoriteProducts { get; }
     DbSet<ShoppingTemplate> ShoppingTemplates { get; }
     DbSet<ShoppingTemplateItem> ShoppingTemplateItems { get; }
+    DbSet<PurchaseBudget> PurchaseBudgets { get; }
+    DbSet<Household> Households { get; }
+    DbSet<HouseholdMember> HouseholdMembers { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

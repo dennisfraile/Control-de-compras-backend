@@ -25,6 +25,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.ImageUrl)
             .HasMaxLength(2048);
 
+        builder.Property(p => p.Notes)
+            .HasMaxLength(1000);
+
         builder.Property(p => p.DefaultQuantity)
             .HasPrecision(18, 4);
 

@@ -11,4 +11,5 @@ public record UpdateProductCommand(
     int CategoryId,
     int DefaultUnitTypeId,
     decimal DefaultQuantity,
-    string? ImageUrl) : IRequest<ProductDto>;
+    string? ImageUrl,
+    string? Notes) : IRequest<ProductDto>;

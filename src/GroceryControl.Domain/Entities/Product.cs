@@ -10,6 +10,7 @@ public class Product
     public int DefaultUnitTypeId { get; set; }
     public decimal DefaultQuantity { get; set; } = 1;
     public string? ImageUrl { get; set; }
+    public string? Notes { get; set; }
     public bool IsGlobal { get; set; }
     public Guid? CreatedByUserId { get; set; }
     public DateTime CreatedAtUtc { get; set; }

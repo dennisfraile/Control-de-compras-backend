@@ -2,6 +2,7 @@ using GroceryControl.Application.Features.Products.Commands.CreateProduct;
 using GroceryControl.Application.Features.Products.Commands.UpdateProduct;
 using GroceryControl.Application.Features.Products.DTOs;
 using GroceryControl.Application.Features.Products.Queries.GetProducts;
+using GroceryControl.Application.Features.Products.Queries.GetProductByBarcode;
 using GroceryControl.Application.Features.Products.Commands.ToggleFavorite;
 using GroceryControl.Application.Features.Products.Queries.GetFavorites;
 using GroceryControl.Application.Features.Products.Queries.SearchProducts;
@@ -32,6 +33,14 @@ public class ProductsController : ControllerBase
         CancellationToken ct = default)
     {
         var result = await _mediator.Send(new GetProductsQuery(categoryId, page, pageSize), ct);
+        return Ok(result);
+    }
+
+    [HttpGet("by-barcode/{barcode}")]
+    public async Task<ActionResult<ProductDto>> GetByBarcode(string barcode, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetProductByBarcodeQuery(barcode), ct);
+        if (result is null) return NotFound();
         return Ok(result);
     }
 

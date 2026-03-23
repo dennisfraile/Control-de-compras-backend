@@ -42,6 +42,7 @@ public class SearchProductsQueryHandler : IRequestHandler<SearchProductsQuery, L
             p.DefaultUnitType.Abbreviation,
             p.DefaultQuantity,
             p.ImageUrl,
+            p.Notes,
             p.IsGlobal,
             p.CreatedByUserId,
             p.CreatedAtUtc)).ToList();
