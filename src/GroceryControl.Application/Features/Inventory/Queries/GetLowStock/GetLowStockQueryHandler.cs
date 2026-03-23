@@ -35,7 +35,8 @@ public class GetLowStockQueryHandler : IRequestHandler<GetLowStockQuery, List<In
                 ie.UnitTypeId,
                 ie.UnitType.Abbreviation,
                 ie.MinimumThreshold,
-                ie.LastUpdatedUtc))
+                ie.LastUpdatedUtc,
+                ie.ExpirationDateUtc))
             .ToListAsync(cancellationToken);
     }
 }

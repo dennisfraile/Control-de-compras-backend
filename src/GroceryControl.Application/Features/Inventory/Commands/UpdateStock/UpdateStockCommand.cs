@@ -7,4 +7,5 @@ public record UpdateStockCommand(
     Guid ProductId,
     decimal NewQuantity,
     int UnitTypeId,
-    decimal MinimumThreshold) : IRequest<InventoryEntryDto>;
+    decimal MinimumThreshold,
+    DateTime? ExpirationDateUtc = null) : IRequest<InventoryEntryDto>;

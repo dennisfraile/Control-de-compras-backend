@@ -10,4 +10,5 @@ public record InventoryEntryDto(
     int UnitTypeId,
     string UnitAbbreviation,
     decimal MinimumThreshold,
-    DateTime LastUpdatedUtc);
+    DateTime LastUpdatedUtc,
+    DateTime? ExpirationDateUtc = null);

@@ -34,7 +34,8 @@ public class GetInventoryQueryHandler : IRequestHandler<GetInventoryQuery, List<
                 ie.UnitTypeId,
                 ie.UnitType.Abbreviation,
                 ie.MinimumThreshold,
-                ie.LastUpdatedUtc))
+                ie.LastUpdatedUtc,
+                ie.ExpirationDateUtc))
             .ToListAsync(cancellationToken);
     }
 }

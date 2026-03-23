@@ -38,6 +38,7 @@ public class UpdateStockCommandHandler : IRequestHandler<UpdateStockCommand, Inv
             entry.CurrentQuantity = request.NewQuantity;
             entry.UnitTypeId = request.UnitTypeId;
             entry.MinimumThreshold = request.MinimumThreshold;
+            entry.ExpirationDateUtc = request.ExpirationDateUtc;
             entry.LastUpdatedUtc = DateTime.UtcNow;
             _inventoryRepository.Update(entry);
         }
@@ -51,6 +52,7 @@ public class UpdateStockCommandHandler : IRequestHandler<UpdateStockCommand, Inv
                 CurrentQuantity = request.NewQuantity,
                 UnitTypeId = request.UnitTypeId,
                 MinimumThreshold = request.MinimumThreshold,
+                ExpirationDateUtc = request.ExpirationDateUtc,
                 LastUpdatedUtc = DateTime.UtcNow
             };
             await _inventoryRepository.AddAsync(entry, cancellationToken);
@@ -76,6 +78,7 @@ public class UpdateStockCommandHandler : IRequestHandler<UpdateStockCommand, Inv
             entry.UnitTypeId,
             unitType.Abbreviation,
             entry.MinimumThreshold,
-            entry.LastUpdatedUtc);
+            entry.LastUpdatedUtc,
+            entry.ExpirationDateUtc);
     }
 }
