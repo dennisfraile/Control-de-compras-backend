@@ -1,5 +1,6 @@
 using GroceryControl.Application.Features.Purchases.Commands.CreatePurchase;
 using GroceryControl.Application.Features.Purchases.Commands.DeletePurchase;
+using GroceryControl.Application.Features.Purchases.Commands.QuickPurchase;
 using GroceryControl.Application.Features.Purchases.Commands.ScanReceipt;
 using GroceryControl.Application.Features.Purchases.DTOs;
 using GroceryControl.Application.Features.Purchases.Queries.ExportPurchases;
@@ -40,6 +41,14 @@ public class PurchasesController : ControllerBase
     {
         var result = await _mediator.Send(command, ct);
         return CreatedAtAction(nameof(GetAll), new { }, result);
+    }
+
+    [HttpPost("quick")]
+    public async Task<IActionResult> QuickPurchase(
+        [FromBody] QuickPurchaseCommand command, CancellationToken ct)
+    {
+        var purchaseId = await _mediator.Send(command, ct);
+        return Ok(new { id = purchaseId });
     }
 
     [HttpDelete("{id:guid}")]

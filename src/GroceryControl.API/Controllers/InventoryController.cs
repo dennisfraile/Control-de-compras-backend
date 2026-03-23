@@ -10,8 +10,11 @@ using GroceryControl.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace GroceryControl.API.Controllers;
+
+public record QuickConsumeRequest(decimal Quantity = 1);
 
 [ApiController]
 [Route("api/[controller]")]
@@ -19,10 +22,14 @@ namespace GroceryControl.API.Controllers;
 public class InventoryController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IApplicationDbContext _context;
+    private readonly ICurrentUserService _currentUser;
 
-    public InventoryController(IMediator mediator)
+    public InventoryController(IMediator mediator, IApplicationDbContext context, ICurrentUserService currentUser)
     {
         _mediator = mediator;
+        _context = context;
+        _currentUser = currentUser;
     }
 
     [HttpGet]
@@ -68,6 +75,22 @@ public class InventoryController : ControllerBase
         if (productId != command.ProductId) return BadRequest();
         var result = await _mediator.Send(command, ct);
         return Ok(result);
+    }
+
+    [HttpPatch("{productId:guid}/quick-consume")]
+    public async Task<IActionResult> QuickConsume(
+        Guid productId, [FromBody] QuickConsumeRequest? request = null, CancellationToken ct = default)
+    {
+        var qty = request?.Quantity ?? 1;
+        var entry = await _context.InventoryEntries
+            .FirstOrDefaultAsync(ie => ie.UserId == _currentUser.UserId && ie.ProductId == productId, ct);
+        if (entry == null) return NotFound();
+
+        entry.CurrentQuantity = Math.Max(0, entry.CurrentQuantity - qty);
+        entry.LastUpdatedUtc = DateTime.UtcNow;
+        await _context.SaveChangesAsync(ct);
+
+        return Ok(entry);
     }
 
     [HttpPatch("{productId:guid}/consume")]

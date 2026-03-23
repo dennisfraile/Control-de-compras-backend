@@ -5,6 +5,7 @@ using GroceryControl.Application.Features.Products.Queries.GetProducts;
 using GroceryControl.Application.Features.Products.Commands.ToggleFavorite;
 using GroceryControl.Application.Features.Products.Queries.GetFavorites;
 using GroceryControl.Application.Features.Products.Queries.SearchProducts;
+using GroceryControl.Application.Features.Products.Queries.GetProductPriceDetail;
 using GroceryControl.Application.Features.Purchases.DTOs;
 using GroceryControl.Application.Features.Purchases.Queries.GetPriceHistory;
 using MediatR;
@@ -39,6 +40,14 @@ public class ProductsController : ControllerBase
         [FromQuery] string q, CancellationToken ct)
     {
         var result = await _mediator.Send(new SearchProductsQuery(q), ct);
+        return Ok(result);
+    }
+
+    [HttpGet("{id:guid}/price-detail")]
+    public async Task<ActionResult<ProductPriceDetailDto>> GetPriceDetail(
+        Guid id, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetProductPriceDetailQuery(id), ct);
         return Ok(result);
     }
 
