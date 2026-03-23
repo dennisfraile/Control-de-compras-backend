@@ -102,18 +102,25 @@ public class ShoppingListGenerator : IShoppingListGenerator
             // Convert suggested quantity back to the entry's unit
             var suggestedInUnit = suggestedQuantity / entry.UnitType.ConversionFactorToBase;
 
+            // Round up to whole packages
+            var packageSize = entry.Product.PackageSize > 0 ? entry.Product.PackageSize : 1;
+            var packages = Math.Ceiling(suggestedInUnit / packageSize);
+            var roundedQuantity = packages * packageSize;
+
             // Get lowest known price
             var (lowestPrice, lowestStore) = await GetLowestPriceAsync(entry.ProductId, ct);
 
             suggestions.Add(new ShoppingListSuggestionDto(
                 ProductId: entry.ProductId,
                 ProductName: entry.Product.Name,
-                SuggestedQuantity: Math.Round(suggestedInUnit, 2),
+                SuggestedQuantity: roundedQuantity,
                 UnitAbbreviation: entry.UnitType.Abbreviation,
                 CurrentStock: Math.Round(entry.CurrentQuantity, 2),
                 Reason: reason,
                 LowestKnownPrice: lowestPrice,
-                LowestPriceStore: lowestStore));
+                LowestPriceStore: lowestStore,
+                PackageLabel: entry.Product.PackageLabel,
+                PackageSize: packageSize));
         }
 
         // Also suggest frequently purchased products not currently in inventory
@@ -125,17 +132,24 @@ public class ShoppingListGenerator : IShoppingListGenerator
 
             var suggestedInUnit = avgConsumption / product.DefaultUnitType.ConversionFactorToBase;
 
+            // Round up to whole packages
+            var pkgSize = product.PackageSize > 0 ? product.PackageSize : 1;
+            var pkgCount = Math.Ceiling(suggestedInUnit / pkgSize);
+            var roundedQty = pkgCount * pkgSize;
+
             var (lowestPrice, lowestStore) = await GetLowestPriceAsync(product.Id, ct);
 
             suggestions.Add(new ShoppingListSuggestionDto(
                 ProductId: product.Id,
                 ProductName: product.Name,
-                SuggestedQuantity: Math.Round(suggestedInUnit, 2),
+                SuggestedQuantity: roundedQty,
                 UnitAbbreviation: product.DefaultUnitType.Abbreviation,
                 CurrentStock: 0,
                 Reason: "Producto comprado frecuentemente sin stock registrado",
                 LowestKnownPrice: lowestPrice,
-                LowestPriceStore: lowestStore));
+                LowestPriceStore: lowestStore,
+                PackageLabel: product.PackageLabel,
+                PackageSize: pkgSize));
         }
 
         return suggestions;

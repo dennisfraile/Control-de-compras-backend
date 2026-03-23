@@ -8,4 +8,6 @@ public record ShoppingListSuggestionDto(
     decimal CurrentStock,
     string Reason,
     decimal? LowestKnownPrice,
-    string? LowestPriceStore);
+    string? LowestPriceStore,
+    string? PackageLabel = null,
+    decimal PackageSize = 1);

@@ -43,6 +43,8 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
         product.DefaultQuantity = request.DefaultQuantity;
         product.ImageUrl = request.ImageUrl;
         product.Notes = request.Notes;
+        product.PackageSize = request.PackageSize;
+        product.PackageLabel = request.PackageLabel;
 
         _productRepository.Update(product);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -67,6 +69,8 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
             product.DefaultQuantity,
             product.ImageUrl,
             product.Notes,
+            product.PackageSize,
+            product.PackageLabel,
             product.IsGlobal,
             product.CreatedByUserId,
             product.CreatedAtUtc);

@@ -11,6 +11,8 @@ public class Product
     public decimal DefaultQuantity { get; set; } = 1;
     public string? ImageUrl { get; set; }
     public string? Notes { get; set; }
+    public decimal PackageSize { get; set; } = 1;
+    public string? PackageLabel { get; set; }
     public bool IsGlobal { get; set; }
     public Guid? CreatedByUserId { get; set; }
     public DateTime CreatedAtUtc { get; set; }

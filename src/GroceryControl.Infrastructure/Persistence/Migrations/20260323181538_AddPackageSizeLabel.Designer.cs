@@ -3,6 +3,7 @@ using System;
 using GroceryControl.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GroceryControl.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GroceryControlDbContext))]
-    partial class GroceryControlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260323181538_AddPackageSizeLabel")]
+    partial class AddPackageSizeLabel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

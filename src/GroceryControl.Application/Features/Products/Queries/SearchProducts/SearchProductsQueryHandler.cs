@@ -43,6 +43,8 @@ public class SearchProductsQueryHandler : IRequestHandler<SearchProductsQuery, L
             p.DefaultQuantity,
             p.ImageUrl,
             p.Notes,
+            p.PackageSize,
+            p.PackageLabel,
             p.IsGlobal,
             p.CreatedByUserId,
             p.CreatedAtUtc)).ToList();

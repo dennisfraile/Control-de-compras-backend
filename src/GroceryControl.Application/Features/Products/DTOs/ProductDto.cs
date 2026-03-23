@@ -12,6 +12,8 @@ public record ProductDto(
     decimal DefaultQuantity,
     string? ImageUrl,
     string? Notes,
+    decimal PackageSize,
+    string? PackageLabel,
     bool IsGlobal,
     Guid? CreatedByUserId,
     DateTime CreatedAtUtc);

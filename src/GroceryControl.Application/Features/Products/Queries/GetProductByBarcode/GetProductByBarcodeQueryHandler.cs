@@ -41,6 +41,8 @@ public class GetProductByBarcodeQueryHandler : IRequestHandler<GetProductByBarco
             product.DefaultQuantity,
             product.ImageUrl,
             product.Notes,
+            product.PackageSize,
+            product.PackageLabel,
             product.IsGlobal,
             product.CreatedByUserId,
             product.CreatedAtUtc);

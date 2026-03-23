@@ -12,4 +12,6 @@ public record UpdateProductCommand(
     int DefaultUnitTypeId,
     decimal DefaultQuantity,
     string? ImageUrl,
-    string? Notes) : IRequest<ProductDto>;
+    string? Notes,
+    decimal PackageSize = 1,
+    string? PackageLabel = null) : IRequest<ProductDto>;
