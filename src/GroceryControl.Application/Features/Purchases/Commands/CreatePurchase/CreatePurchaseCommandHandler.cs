@@ -41,6 +41,7 @@ public class CreatePurchaseCommandHandler : IRequestHandler<CreatePurchaseComman
             StoreId = request.StoreId,
             PurchaseDateUtc = request.PurchaseDateUtc,
             Notes = request.Notes,
+            Tags = request.Tags,
             CreatedAtUtc = DateTime.UtcNow
         };
 

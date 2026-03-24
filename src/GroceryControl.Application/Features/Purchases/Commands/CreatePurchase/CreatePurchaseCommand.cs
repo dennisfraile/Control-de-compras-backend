@@ -7,6 +7,7 @@ public record CreatePurchaseCommand(
     Guid StoreId,
     DateTime PurchaseDateUtc,
     string? Notes,
+    string? Tags,
     List<CreatePurchaseItemCommand> Items) : IRequest<PurchaseDto>;
 
 public record CreatePurchaseItemCommand(

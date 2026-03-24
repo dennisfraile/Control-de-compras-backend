@@ -18,6 +18,9 @@ public class PurchaseConfiguration : IEntityTypeConfiguration<Purchase>
         builder.Property(p => p.Notes)
             .HasMaxLength(1000);
 
+        builder.Property(p => p.Tags)
+            .HasMaxLength(500);
+
         builder.HasIndex(p => new { p.UserId, p.PurchaseDateUtc });
 
         builder.HasOne(p => p.User)

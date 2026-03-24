@@ -3,11 +3,13 @@ using GroceryControl.Application.Features.Auth.Commands.RefreshToken;
 using GroceryControl.Application.Features.Auth.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace GroceryControl.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[EnableRateLimiting("auth")]
 public class AuthController : ControllerBase
 {
     private readonly IMediator _mediator;

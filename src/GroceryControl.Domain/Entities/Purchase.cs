@@ -8,6 +8,7 @@ public class Purchase
     public DateTime PurchaseDateUtc { get; set; }
     public decimal TotalAmount { get; set; }
     public string? Notes { get; set; }
+    public string? Tags { get; set; }
     public DateTime CreatedAtUtc { get; set; }
 
     // Navigation
